@@ -8,7 +8,7 @@
 
 ## 1. Define the round scope (re-read the latest code)
 
-- Scope = the full diff from the base branch (main/master) to the current working tree: `git diff <base> --stat` (staged + unstaged; on the base branch, only uncommitted changes).
+- Scope = the user-confirmed scope from initialization (see SKILL.md → Workflow → Initialize); restate the chosen option in one line. If the scope turns out empty, report it and re-confirm with the user.
 - **Re-run every round**: fetch the latest diff and re-read the relevant file contents; reconstructing the code state from memory is forbidden (including code you changed in the previous round yourself).
 - List the files to review this round.
 - **Attention allocation priority** (the key of the multi-round design; follow strictly):
@@ -26,7 +26,7 @@
 
 - Process each candidate issue as follows:
   1. **Dedupe**: compare against the restated history list — the same issue reworded is not a new finding;
-  2. **Evidence**: each finding must cite evidence: the relevant requirement/acceptance criteria, a reproducible failure scenario, or a failing test; drop it if no evidence can be given;
+  2. **Evidence**: each finding must cite evidence: the relevant requirement/acceptance criteria, a reproducible failure scenario, or a failing test; drop it if no evidence can be given. Test evidence counts only if the assertion can actually fail on the target behavior's regression — an assertion that cannot fail (e.g., a serialization/string-match assertion never checked against the real output format) is defective, not evidence;
   3. **Grade**: label P0-P3 per the rubric, with reasoning;
   4. **Record**: record in the conversation with an ID (e.g., R2-1), including level/category/location/description/evidence.
 - The review must check callers (`git grep` usage sites), not just the change itself.
@@ -49,7 +49,7 @@
 
 - Detect the project's test/lint commands (package.json scripts, Makefile, pyproject/pytest, Cargo, etc.); run them if available and record an output summary;
 - **When the project has no test command, honestly write "tests unavailable, not verified" — never write "no regression"**;
-- Diff trace: check the change surface of this round's fixes one by one; verify callers and neighboring logic are unaffected;
+- Diff trace: check the change surface of this round's fixes one by one; verify callers and neighboring logic are unaffected. **The fix's new code itself is a review target**: new state, resources, and caches must be bounded and consistent with existing conventions; issues found in the fix are recorded and graded this round — do not wait for the next round;
 - Regressions found are recorded as new findings and graded the same way; P0/P1 regressions: ask for authorization again on the spot, then fix; P2/P3 regressions: add to the unresolved list (fold into the next round if there is one).
 
 ## 7. Record the round's conclusion (in the conversation)
@@ -57,5 +57,6 @@
 - Findings this round: N (P0 × a / P1 × b / P2 × c / P3 × d);
 - Fixes this round: N (file + location + linked ID), all uncommitted;
 - Unresolved items and reasons;
-- Coverage list;
+- Scope and baseline this round (one line, e.g., merge-base → working tree / uncommitted only / commit range);
+- Coverage list + search space: what was NOT checked or run this round (E2E not run, cross-environment/cross-implementation not verified, categories not covered). **A zero-finding round must declare its search space** — "no findings" only means "nothing found in the searched space";
 - Regression check conclusion and evidence.

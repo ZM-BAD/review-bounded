@@ -10,19 +10,23 @@ description: 'Run exactly three rounds of bounded code review on the current bra
 This skill is the **orchestration layer** of code review; it does not re-implement the execution details:
 
 - Execution uses the agent's own tools (git, file reads, Bash) and the project's existing tests / lint / static checks;
-- If another review skill is installed in the environment (e.g., code-review, pr-review-toolkit), individual rounds may be delegated to it; this skill owns round orchestration, recording, and the convergence verdict;
-- With no review skill installed, execute the built-in instructions in `references/round-prompt.md` — no external services required.
+- Each round executes the built-in instructions in `references/round-prompt.md` directly — no external services and no delegation to other review skills.
 
 ## When to use / when not to use
 
 - **Use**: feature branch development is complete and ready to merge; the user asks for "three rounds of CR" / "bounded review" / "check whether it converges" / "don't review forever".
-- **Don't use**: single-line or pure-docs changes (one round is enough); the user explicitly asks for a quick single round; the user asks to review someone else's PR (this skill only reviews the current workspace/branch).
+- **Don't use**: single-line or pure-docs changes (one round is enough); the user explicitly asks for a quick single round; the user asks to review someone else's PR (this skill only reviews the current workspace/branch); **non-interactive modes** (`-p` / CI) — the per-round authorization and the commit decision require a human in the loop.
 
 ## Workflow
 
 1. **Initialize**
    - Read `references/rubric.md` (the severity scale; must be loaded before round 1 and governs all later rounds);
-   - Determine the review scope: the full diff from the base branch (main, or master if absent) to the current working tree (`git diff <base>`, including staged and unstaged changes); when working directly on the base branch, only the uncommitted changes; if there are uncommitted changes, ask whether to include them (default: include).
+   - **Ask the user to pick the review scope**. Typical options:
+     a. Current code vs the base branch (main, or master if absent): `git diff $(git merge-base <base> HEAD)` — the branch's own changes including staged and unstaged (merge-base keeps the diff clean even if the base has advanced);
+     b. Uncommitted changes only: `git diff HEAD` — the default when working directly on the base branch;
+     c. The current branch's recent commits: `git log <base>..HEAD` — the user specifies the range (e.g., the last N commits); per-round re-reads use `git diff <base>...HEAD` (three-dot: same merge-base semantics as option a, so the diff stays clean even if the base has advanced) for that range, and uncommitted changes on top of the range are out of scope unless the user includes them;
+     d. Custom — the user names the scope in their own words (e.g., "only src/ and tests/", "the auth refactor in commit abc123", "everything changed this week"); translate it into a concrete diff, file list, or commit range before reviewing.
+   - If the chosen scope turns out empty, report it and re-confirm the scope with the user.
 
 2. **Three-round loop** (each round executes the full instructions in `references/round-prompt.md`)
    Each round = restate the previous rounds' finding lists (confirm memory, calibrate dedupe) → define the round scope and **re-read the project's latest code** → review against the rubric → report findings and **ask for authorization** → fix after authorization (changes stay in the working tree, **no commits**) → regression check (run tests/lint and record evidence) → record the round's conclusion (in the conversation).

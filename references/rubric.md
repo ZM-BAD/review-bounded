@@ -29,4 +29,4 @@ Every finding in every round must be graded on this scale. **The scale must not 
 | Consistency | Consistency with other modules / existing conventions, duplicated implementations |
 | Maintainability | Naming, abstraction, dead code, testability, hard-coding |
 | Compatibility | Interface change blast radius, data formats, config compatibility |
-| Tests | Whether tests cover key paths, or only the happy path |
+| Tests | Whether tests cover key paths, or only the happy path; whether assertions can actually fail on the target behavior's regression (an assertion that cannot fail is defective, not evidence) |

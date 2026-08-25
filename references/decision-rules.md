@@ -8,14 +8,17 @@ Output in the following structure (this is the core deliverable to the user):
 
 ```
 Round 1:
+- Scope/baseline: <one line, e.g., merge-base main → working tree>
 - Findings: R1-1 (P0, concurrency, x.go:42, deadlock) ...
 - Fixes: x.go:42 (R1-1), y.go:18 (R1-2) ... (uncommitted)
 
 Round 2:
+- Scope/baseline: <one line>
 - Findings: R2-1 (P1, error handling, y.go:18, ...) ...
 - Fixes: ...
 
 Round 3:
+- Scope/baseline: <one line>
 - Findings: R3-1 (P2, boundary, z.go:5, ...) ...
 - Fixes: ...
 
