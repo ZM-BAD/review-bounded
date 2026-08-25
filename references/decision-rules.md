@@ -31,13 +31,13 @@ All findings above are graded on the same scale (rubric P0-P3).
 2. **Fix regressions**: did the three rounds detect any "new bug introduced by a fix"? Cite evidence (test results, diff trace); when tests are unavailable and no trace was done, honestly write "not verified" — never "no regression".
 3. **Last-round issues**: what are round three's issues? For each, what would break if it shipped today (give a concrete scenario)?
 
-## Step 3: Prosecutor's brief (must be output before the verdict)
+## Step 3: The case against merging (must be stated before the verdict)
 
 List the 3 strongest reasons against "safe to merge now", each with:
 - The reason itself;
 - An evidence strength label: `code evidence` (directly visible in the diff) / `test evidence` (has test output) / `speculation` (no direct evidence).
 
-If the prosecutor's brief contains a P0/P1 issue with `code evidence`, the verdict MUST be NOT CONVERGED.
+If the case against merging contains a P0/P1 issue with `code evidence`, the verdict MUST be NOT CONVERGED.
 
 ## Step 4: Verdict
 
@@ -46,7 +46,7 @@ Judge **CONVERGED** only when ALL hold:
 - The severity trend converges: each round's top severity is not higher than the previous round's, and the P0/P1 count does not rise;
 - Round 3 has no P0/P1 (only P2/P3 remain);
 - No fix-introduced regression detected (with test evidence, or explicitly stating that tests are unavailable but the diff trace was completed);
-- No irrefutable blocker in the prosecutor's brief.
+- No unanswerable objection in the case against merging.
 
 If any condition fails, or **if anything is uncertain**, always judge **NOT CONVERGED**.
 
@@ -59,7 +59,7 @@ Meta-question 1 (severity trend): top levels P1→P2→P3 across rounds, P0+P1 c
 Meta-question 2 (fix regressions): none detected; basis: all three rounds' tests passed + diff trace
 Meta-question 3 (last-round issues): R3-1 (P2, boundary) ...
 
-Prosecutor's brief:
+The case against merging:
 1. ... (evidence strength: code evidence)
 2. ... (evidence strength: test evidence)
 3. ... (evidence strength: speculation)

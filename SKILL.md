@@ -32,7 +32,7 @@ This skill is the **orchestration layer** of code review; it does not re-impleme
    Each round = restate the previous rounds' finding lists (confirm memory, calibrate dedupe) → define the round scope and **re-read the project's latest code** → review against the rubric → report findings and **ask for authorization** → fix after authorization (changes stay in the working tree, **no commits**) → regression check (run tests/lint and record evidence) → record the round's conclusion (in the conversation).
 
 3. **Final output**
-   Per `references/decision-rules.md`: summarize the three rounds' findings and fixes, answer the three meta-questions, output the prosecutor's brief first, then give the CONVERGED / NOT CONVERGED verdict, the production-impact grading of the last round's issues, and the list of unresolved items; then show the three rounds' fix lists and **let the user decide whether and how to commit** (one commit or grouped by finding).
+   Per `references/decision-rules.md`: summarize the three rounds' findings and fixes, answer the three meta-questions, state the case against merging first, then give the CONVERGED / NOT CONVERGED verdict, the production-impact grading of the last round's issues, and the list of unresolved items; then show the three rounds' fix lists and **let the user decide whether and how to commit** (one commit or grouped by finding).
 
 ## Recording
 
@@ -48,7 +48,7 @@ This skill is the **orchestration layer** of code review; it does not re-impleme
 - Authorization must be obtained before fixing.
 - No commits during the three rounds; afterward the user decides whether and how to commit.
 - When unsure whether it converged, always judge NOT CONVERGED.
-- The final verdict must be preceded by the prosecutor's brief (the strongest reasons against merging).
+- The final verdict must be preceded by the case against merging (the strongest reasons not to merge).
 - No agent-private features (hooks, slash-command syntax) — keeps the skill portable across agents.
 
 ## Related files
