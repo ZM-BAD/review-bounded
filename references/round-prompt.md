@@ -18,7 +18,7 @@
 
 ## 2. Coverage log (recorded in the conversation)
 
-- Record which categories (the nine in the rubric) and which files were checked this round.
+- Record which categories (the categories in the rubric) and which files were checked this round.
 - Compare with the previous round and explicitly mark: newly covered [X] / re-checked [Y].
 - If this round's findings fall into categories already checked in previous rounds, say so honestly (that is an attention problem, worth flagging); findings in previously unchecked categories are normal coverage progression.
 
@@ -33,7 +33,7 @@
 
 ## 4. Report and authorization (must come before fixing)
 
-- Report this round's findings to the user: the issue list (level + location + one-line description) plus a fix plan per issue;
+- Report this round's findings to the user **in the user's conversation language** (detect it from the user's messages; a Chinese user gets a Chinese report): the issue list (level + location + one-line description) plus a fix plan per issue;
 - Fix recommendation tiers:
   - P0/P1: recommended to fix (must-fix);
   - P2/P3: give a "fix / optional" recommendation with reasoning; the user decides;

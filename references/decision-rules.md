@@ -2,6 +2,10 @@
 
 Execute after the three-round loop finishes. **Fully restate the three rounds' findings and fix lists before the verdict** (from the conversation record) — never answer from memory or impression.
 
+## Output language
+
+Output the whole report in the **user's conversation language**, detected from the user's messages — never default to English. A user writing in Simplified Chinese gets the Chinese template below (判定：收敛 / 判定：未收敛, 关键问题 1/2/3, 反对合并的理由, 代码证据 / 测试证据 / 推测, 未修复项); a user writing in English gets the English template. When the user mixes languages, follow their most recent messages. Use the fixed strings in the templates verbatim — do not paraphrase or re-translate them. Language-neutral parts (finding IDs like R2-1, severity levels P0-P3, file:line references) stay unchanged in both languages. Step 5's commit-decision questions and the delivery notes follow the same rule: a Chinese user is asked in Chinese — 这些修复要提交吗？（全部 / 部分 / 暂不）；如果要提交：一个 commit，还是按 finding 分组多个 commit？Step 1's summary labels (Scope/baseline, Findings, Fixes) localize the same way — Chinese: 范围/基准、发现、修复.
+
 ## Step 1: Output the three-round summary
 
 Output in the following structure (this is the core deliverable to the user):
@@ -52,6 +56,10 @@ If any condition fails, or **if anything is uncertain**, always judge **NOT CONV
 
 ## Output format
 
+Use the template matching the user's conversation language (see "Output language" above).
+
+**English template** (user writes in English):
+
 ```
 Verdict: CONVERGED / NOT CONVERGED
 
@@ -71,6 +79,29 @@ Production impact of last-round issues:
 
 Unresolved items (unauthorized / unfixed P2/P3):
 - [ ] R2-2: ... (suggested handling)
+```
+
+**Chinese template** (user writes in Simplified Chinese):
+
+```
+判定：收敛 / 判定：未收敛
+
+关键问题 1（严重度趋势）：三轮最高级别 P1→P2→P3，P0+P1 数量 2→1→0
+关键问题 2（fix 回归）：未检测到——三轮测试通过 + diff 追溯
+关键问题 3（最后一轮问题）：R3-1（P2，边界）……
+
+反对合并的理由：
+1. ……（代码证据）
+2. ……（测试证据）
+3. ……（推测）
+
+最后一轮问题的上线影响：
+- 必然出问题：……（场景）
+- 可能出问题：……（场景）
+- 不会出问题：……
+
+未修复项（未授权 / 未修复的 P2/P3）：
+- [ ] R2-2：……（建议处理方式）
 ```
 
 ## Step 5: Commit decision (the user decides)

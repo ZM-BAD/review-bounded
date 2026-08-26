@@ -49,6 +49,7 @@ This skill is the **orchestration layer** of code review; it does not re-impleme
 - No commits during the three rounds; afterward the user decides whether and how to commit.
 - When unsure whether it converged, always judge NOT CONVERGED.
 - The final verdict must be preceded by the case against merging (the strongest reasons not to merge).
+- Output in the user's conversation language, detected from the user's messages (Chinese user → the Chinese template in `references/decision-rules.md` → "Output language"; English user → the English template).
 - No agent-private features (hooks, slash-command syntax) — keeps the skill portable across agents.
 
 ## Related files
